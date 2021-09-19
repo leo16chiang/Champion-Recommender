@@ -4,7 +4,8 @@ import urllib.request
 from urllib.request import urlopen
 import json
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfTransformer, TfidfVectorizer
+from sklearn.metrics.pairwise import linear_kernel
 
 #Riot Games API Key
 key = "RGAPI-ced52b64-2200-4651-b293-e1352c0302b4"
@@ -33,4 +34,19 @@ def get_champion_played(matchid):
         "https://americas.api.riotgames.com/lol/match/v5/matches/" + matchid + "?api_key=" + key).read()
     champplayed = json.loads(data)["info"]
 
+tfidf = TfidfVectorizer(stop_words='english')
+metadata['overview'] = metadata['overview'].fillna('')
+tfidf_matrix = tfidf.fit_transform(metadata['overview'])
+cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
+indices = pd.Series(metadata.index, index=metadata['Name']).drop_duplicates()
 
+# Recommendation function
+def get_recommendations(name, cosine_sim=cosine_sim):
+    idx = indices[name]
+    sim_scores = list(enumerate(cosine_sim[idx]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    sim_scores = sim_scores[1:11]
+    movie_indices = [i[0] for i in sim_scores]
+    return metadata['Name'].iloc[movie_indices]
+
+print(get_recommendations('Yasuo'))
