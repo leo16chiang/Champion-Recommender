@@ -1,10 +1,22 @@
-Important links for this project
+Important Information
 
-Get PUUID using Summoner Name
-https://developer.riotgames.com/apis#summoner-v4/GET_getBySummonerName
+Koro Funk Account Information:
+    "id": "EPSYEghWgM80C8QTiui484HJEWOoMenG5KjteYGGYmk8Jas",
+    "accountId": "B_DV-eAAzX2fAfsshrgAJEVGZFGs1SNlAYjemaU_25lCkDU",
+    "puuid": "AnbU-WVWXS03T8oSZEIjnxGTSHJNusRLmZ2C1Fo3xZfS1Gdmc1NVf14PS6mGAEEwFdgNgmif3zFmOw",
 
-Get MatchIDs for past 20 Games using PUUID
-https://developer.riotgames.com/apis#match-v5/GET_getMatchIdsByPUUID
 
-Get Match 
-https://developer.riotgames.com/apis#match-v5/GET_getMatch
+Get PUUID using Summoner Name:
+    https://developer.riotgames.com/apis#summoner-v4/GET_getBySummonerName
+
+Get MatchIDs for past 20 Games using PUUID:
+    https://developer.riotgames.com/apis#match-v5/GET_getMatchIdsByPUUID
+
+Get Match Information from MatchID:
+    https://developer.riotgames.com/apis#match-v5/GET_getMatch
+
+Get the number of games played per champ (potentially graph)
+
+Using a Content-Based Recommender, recommend new champions to play based on the results from an excel spreadsheet.
+
+

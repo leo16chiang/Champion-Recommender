@@ -1,2 +1,2 @@
 # MyShop
-Using Data Science to Guess League of Legends My Shop Skins
+Using Data Science to Recommend League of Legends Champions based on Match History
