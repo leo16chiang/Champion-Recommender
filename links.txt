@@ -1,0 +1,10 @@
+Important links for this project
+
+Get PUUID using Summoner Name
+https://developer.riotgames.com/apis#summoner-v4/GET_getBySummonerName
+
+Get MatchIDs for past 20 Games using PUUID
+https://developer.riotgames.com/apis#match-v5/GET_getMatchIdsByPUUID
+
+Get Match 
+https://developer.riotgames.com/apis#match-v5/GET_getMatch
