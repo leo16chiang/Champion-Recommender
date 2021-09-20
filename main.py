@@ -8,11 +8,16 @@ from sklearn.feature_extraction.text import TfidfTransformer, TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
 #Riot Games API Key
-key = "RGAPI-ced52b64-2200-4651-b293-e1352c0302b4"
+key = "RGAPI-ecc1eb93-5d4e-473e-9c94-830c0774aab5"
 
 #Load Champion Metadata
 metadata = pd.read_csv('Champion Metadata.csv', low_memory=False)
 
+tfidf = TfidfVectorizer(stop_words='english')
+metadata['Lore'] = metadata['Lore'].fillna('')
+tfidf_matrix = tfidf.fit_transform(metadata['Lore'])
+cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
+indices = pd.Series(metadata.index, index=metadata['Name']).drop_duplicates()
 
 #Get PUUID using Summoner Name:
 def get_puuid(username):
@@ -29,16 +34,23 @@ def get_match_history(puuid):
     return matchhistory
 
 #Get Match Information from MatchID:
-def get_champion_played(matchid):
+def get_champion_played(matchid, puuid):
+    index = 0
     data = urllib.request.urlopen(
         "https://americas.api.riotgames.com/lol/match/v5/matches/" + matchid + "?api_key=" + key).read()
-    champplayed = json.loads(data)["info"]
+    for i in range(10):
+        summonernumber = json.loads(data)["metadata"]["participants"][i]
+        if summonernumber == puuid:
+            index = i
+    champplayed = json.loads(data)["info"]["participants"][index]["championName"]
+    return champplayed
 
-tfidf = TfidfVectorizer(stop_words='english')
-metadata['Lore'] = metadata['Lore'].fillna('')
-tfidf_matrix = tfidf.fit_transform(metadata['Lore'])
-cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
-indices = pd.Series(metadata.index, index=metadata['Name']).drop_duplicates()
+#Get Total Champion Plays for last 100 games
+def total_plays(matchistory, puuid):
+    lst = []
+    for i in range(matchistory):
+        lst = lst + get_champion_played(matchistory[i], puuid)
+    return lst
 
 # Recommendation function
 def get_recommendations(name, cosine_sim=cosine_sim):
@@ -47,6 +59,20 @@ def get_recommendations(name, cosine_sim=cosine_sim):
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
     sim_scores = sim_scores[1:11]
     movie_indices = [i[0] for i in sim_scores]
+    print("The recommended champions for " + name + " are: \n")
     return metadata['Name'].iloc[movie_indices]
 
-print(get_recommendations('Taliyah'))
+def most_common(lst):
+    return max(set(lst), key=lst.count)
+
+garenlist = ["Garen", "Garen", "Garen", "Garen", "Garen", "Garen", "Garen", "Garen", "Darius","Darius","Darius" ]
+
+def main():
+    summonername = input("Type in your summoner name: \n")
+    puuid = get_puuid(summonername)
+    matchhistory = get_match_history(puuid)
+    totalplays = total_plays(matchhistory, puuid)
+    main = most_common(garenlist)
+    print("Your most played champ was: " + main)
+    print(get_recommendations(main))
+
