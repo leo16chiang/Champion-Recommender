@@ -35,18 +35,18 @@ def get_champion_played(matchid):
     champplayed = json.loads(data)["info"]
 
 tfidf = TfidfVectorizer(stop_words='english')
-metadata['overview'] = metadata['overview'].fillna('')
-tfidf_matrix = tfidf.fit_transform(metadata['overview'])
+metadata['Lore'] = metadata['Lore'].fillna('')
+tfidf_matrix = tfidf.fit_transform(metadata['Lore'])
 cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
 indices = pd.Series(metadata.index, index=metadata['Name']).drop_duplicates()
 
 # Recommendation function
 def get_recommendations(name, cosine_sim=cosine_sim):
-    idx = indices[name]
-    sim_scores = list(enumerate(cosine_sim[idx]))
+    index = indices[name]
+    sim_scores = list(enumerate(cosine_sim[index]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
     sim_scores = sim_scores[1:11]
     movie_indices = [i[0] for i in sim_scores]
     return metadata['Name'].iloc[movie_indices]
 
-print(get_recommendations('Yasuo'))
+print(get_recommendations('Taliyah'))
