@@ -8,7 +8,7 @@ from sklearn.feature_extraction.text import TfidfTransformer, TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
 #Riot Games API Key
-key = "RGAPI-ecc1eb93-5d4e-473e-9c94-830c0774aab5"
+key = "YOUR API KEY HERE"
 
 #Load Champion Metadata
 metadata = pd.read_csv('Champion Metadata.csv', low_memory=False)
