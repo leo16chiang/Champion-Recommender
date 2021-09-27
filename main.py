@@ -65,14 +65,14 @@ def get_recommendations(name, cosine_sim=cosine_sim):
 def most_common(lst):
     return max(set(lst), key=lst.count)
 
-garenlist = ["Garen", "Garen", "Garen", "Garen", "Garen", "Garen", "Garen", "Garen", "Darius","Darius","Darius" ]
 
 def main():
     summonername = input("Type in your summoner name: \n")
     puuid = get_puuid(summonername)
     matchhistory = get_match_history(puuid)
     totalplays = total_plays(matchhistory, puuid)
-    main = most_common(garenlist)
+    main = most_common(totalplays)
     print("Your most played champ was: " + main)
     print(get_recommendations(main))
 
+main()
